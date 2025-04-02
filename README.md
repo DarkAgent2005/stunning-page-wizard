@@ -1,8 +1,57 @@
-# Welcome to your Lovable project
+
+# AI-Powered Productivity Platform
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/413338ea-b955-43e2-9781-4606e0d55dac
+
+## Features
+
+- User authentication (login and registration)
+- Dashboard with productivity metrics
+- Modern, responsive UI with dark theme and gold accents
+- Animations for enhanced user experience
+
+## How to run this project on Windows
+
+### Prerequisites
+
+Before running this project, make sure you have the following installed:
+
+1. **Node.js & npm** - We recommend installing via nvm-windows:
+   - Download and run the nvm-windows installer from [here](https://github.com/coreybutler/nvm-windows/releases)
+   - Open Command Prompt as Administrator
+   - Run the following commands:
+     ```
+     nvm install 18.18.0
+     nvm use 18.18.0
+     ```
+
+### Setup and Run Instructions
+
+Follow these steps to run the project:
+
+```cmd
+:: Step 1: Clone the repository
+git clone <YOUR_GIT_URL>
+
+:: Step 2: Navigate to the project directory
+cd <YOUR_PROJECT_NAME>
+
+:: Step 3: Install dependencies
+npm install
+
+:: Step 4: Start the development server
+npm run dev
+```
+
+The application will start running at `http://localhost:5173/` (or another port if 5173 is in use).
+
+## Accessing the application
+
+- **Home Page**: http://localhost:5173/
+- **Login**: http://localhost:5173/login
+- **Dashboard**: http://localhost:5173/dashboard (after login)
 
 ## How can I edit this code?
 
@@ -18,24 +67,6 @@ Changes made via Lovable will be committed automatically to this repo.
 
 If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
 **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).
@@ -50,23 +81,23 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
+## Technologies used
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
 - React
+- React Router
 - shadcn-ui
 - Tailwind CSS
+- Lucide React icons
 
-## How can I deploy this project?
+## Deployment
 
 Simply open [Lovable](https://lovable.dev/projects/413338ea-b955-43e2-9781-4606e0d55dac) and click on Share -> Publish.
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
+## Custom Domain Setup
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 

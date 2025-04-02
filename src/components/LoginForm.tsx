@@ -13,14 +13,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -31,12 +33,21 @@ const LoginForm = () => {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      toast({
-        title: "Login Successful",
-        description: "Welcome back! Redirecting to dashboard...",
-      });
-      // Redirect to dashboard after successful login
-      navigate("/dashboard");
+      
+      if (isRegister) {
+        toast({
+          title: "Account created successfully",
+          description: "Welcome to the productivity platform! Please sign in.",
+        });
+        setIsRegister(false);
+      } else {
+        toast({
+          title: "Login Successful",
+          description: "Welcome back! Redirecting to dashboard...",
+        });
+        // Redirect to dashboard after successful login
+        navigate("/dashboard");
+      }
     }, 1500);
   };
 
@@ -44,14 +55,33 @@ const LoginForm = () => {
     <Card className="w-full max-w-md mx-auto bg-dark-light border border-dark-lighter animate-fade-up">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center gradient-text">
-          Welcome Back
+          {isRegister ? "Create Account" : "Welcome Back"}
         </CardTitle>
         <CardDescription className="text-center text-slate-400">
-          Enter your credentials to access your dashboard
+          {isRegister 
+            ? "Sign up for a new account to get started" 
+            : "Enter your credentials to access your dashboard"}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
+          {isRegister && (
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <div className="relative">
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="bg-dark-lighter border-dark-lighter text-slate-100 focus:border-gold"
+                  required={isRegister}
+                />
+              </div>
+            </div>
+          )}
+          
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <div className="relative">
@@ -69,9 +99,11 @@ const LoginForm = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <a href="#" className="text-xs text-gold hover:underline">
-                Forgot password?
-              </a>
+              {!isRegister && (
+                <a href="#" className="text-xs text-gold hover:underline">
+                  Forgot password?
+                </a>
+              )}
             </div>
             <div className="relative">
               <Input
@@ -96,7 +128,7 @@ const LoginForm = () => {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex flex-col space-y-4">
           <Button 
             type="submit" 
             disabled={isLoading}
@@ -108,22 +140,46 @@ const LoginForm = () => {
             {isLoading ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-dark mr-3"></div>
-                <span>Logging in...</span>
+                <span>{isRegister ? "Creating account..." : "Logging in..."}</span>
               </div>
             ) : (
               <span className="flex items-center">
-                Sign In <ArrowRight className="ml-2 h-4 w-4" />
+                {isRegister ? (
+                  <>Create Account <UserPlus className="ml-2 h-4 w-4" /></>
+                ) : (
+                  <>Sign In <ArrowRight className="ml-2 h-4 w-4" /></>
+                )}
               </span>
             )}
           </Button>
+          
+          <div className="text-center text-slate-400">
+            {isRegister ? (
+              <span>
+                Already have an account?{" "}
+                <button 
+                  type="button"
+                  onClick={() => setIsRegister(false)} 
+                  className="text-gold hover:underline"
+                >
+                  Sign in
+                </button>
+              </span>
+            ) : (
+              <span>
+                Don't have an account?{" "}
+                <button 
+                  type="button"
+                  onClick={() => setIsRegister(true)} 
+                  className="text-gold hover:underline"
+                >
+                  Create one
+                </button>
+              </span>
+            )}
+          </div>
         </CardFooter>
       </form>
-      <div className="mx-6 mb-6 text-center text-slate-400">
-        <span>Don't have an account? </span>
-        <a href="#" className="text-gold hover:underline">
-          Create one
-        </a>
-      </div>
     </Card>
   );
 };
