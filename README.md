@@ -1,104 +1,80 @@
 
-# AI-Powered Productivity Platform
+# AI Productivity Platform
 
-## Project info
+A modern productivity platform powered by AI, featuring a beautiful dark theme UI with gold accents and OAuth2 authentication.
 
-**URL**: https://lovable.dev/projects/413338ea-b955-43e2-9781-4606e0d55dac
-
-## Features
-
-- User authentication (login and registration)
-- Dashboard with productivity metrics
-- Modern, responsive UI with dark theme and gold accents
-- Animations for enhanced user experience
-
-## How to run this project on Windows
+## Project Setup for Windows
 
 ### Prerequisites
 
-Before running this project, make sure you have the following installed:
-
-1. **Node.js & npm** - We recommend installing via nvm-windows:
-   - Download and run the nvm-windows installer from [here](https://github.com/coreybutler/nvm-windows/releases)
-   - Open Command Prompt as Administrator
-   - Run the following commands:
+1. **Node.js and npm**
+   - Install [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)
+   - After installing nvm-windows, open Command Prompt as administrator and run:
      ```
-     nvm install 18.18.0
-     nvm use 18.18.0
+     nvm install latest
+     nvm use latest
      ```
 
-### Setup and Run Instructions
+2. **Git**
+   - Download and install from [git-scm.com](https://git-scm.com/download/win)
 
-Follow these steps to run the project:
+### Setup Instructions
 
-```cmd
-:: Step 1: Clone the repository
-git clone <YOUR_GIT_URL>
+1. **Clone the repository**
+   ```
+   git clone https://github.com/your-username/ai-productivity-platform.git
+   cd ai-productivity-platform
+   ```
 
-:: Step 2: Navigate to the project directory
-cd <YOUR_PROJECT_NAME>
+2. **Install dependencies**
+   ```
+   npm install
+   ```
 
-:: Step 3: Install dependencies
-npm install
+3. **Set up environment variables**
+   - Create a file named `.env.local` in the root directory
+   - Add your Clerk publishable key:
+     ```
+     VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key_here
+     ```
 
-:: Step 4: Start the development server
-npm run dev
-```
+4. **Run the development server**
+   ```
+   npm run dev
+   ```
 
-The application will start running at `http://localhost:5173/` (or another port if 5173 is in use).
+5. **Access the application**
+   - Open your browser and navigate to: `http://localhost:8080`
 
-## Accessing the application
+## Authentication
 
-- **Home Page**: http://localhost:5173/
-- **Login**: http://localhost:5173/login
-- **Dashboard**: http://localhost:5173/dashboard (after login)
+This project uses [Clerk](https://clerk.com) for authentication, with support for:
+- Email/password authentication
+- Google OAuth
+- GitHub OAuth
+- Twitter OAuth
 
-## How can I edit this code?
+## Available Scripts
 
-There are several ways of editing your application.
+In the project directory, you can run:
 
-**Use Lovable**
+### `npm run dev`
+Runs the app in development mode.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/413338ea-b955-43e2-9781-4606e0d55dac) and start prompting.
+### `npm run build`
+Builds the app for production to the `dist` folder.
 
-Changes made via Lovable will be committed automatically to this repo.
+### `npm run preview`
+Locally preview the production build.
 
-**Use your preferred IDE**
+## Technologies Used
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- React with TypeScript
+- Vite for build tooling
+- Tailwind CSS for styling
+- Clerk for authentication
+- React Router for navigation
+- Tanstack Query for data fetching
+- Lucide React for icons
+- Shadcn/UI for component library
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## Technologies used
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- React Router
-- shadcn-ui
-- Tailwind CSS
-- Lucide React icons
-
-## Deployment
-
-Simply open [Lovable](https://lovable.dev/projects/413338ea-b955-43e2-9781-4606e0d55dac) and click on Share -> Publish.
-
-## Custom Domain Setup
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)

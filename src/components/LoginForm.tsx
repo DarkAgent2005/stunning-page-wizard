@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Eye, EyeOff, ArrowRight, UserPlus, Github, Mail, Twitter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { useAuth, useSignIn, useSignUp } from "@clerk/clerk-react";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -27,45 +28,102 @@ const LoginForm = () => {
   const [isRegister, setIsRegister] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  // Clerk authentication hooks
+  const { isSignedIn } = useAuth();
+  const { signIn, isLoaded: signInLoaded } = useSignIn();
+  const { signUp, isLoaded: signUpLoaded } = useSignUp();
+
+  // Check if the user is already signed in
+  React.useEffect(() => {
+    if (isSignedIn) {
+      navigate("/dashboard");
+    }
+  }, [isSignedIn, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      
+    try {
       if (isRegister) {
-        toast({
-          title: "Account created successfully",
-          description: "Welcome to the productivity platform! Please sign in.",
+        // Sign up with email
+        if (!signUpLoaded) return;
+        
+        await signUp.create({
+          firstName: name.split(" ")[0],
+          lastName: name.split(" ").slice(1).join(" ") || "",
+          emailAddress: email,
+          password: password,
         });
-        setIsRegister(false);
+        
+        // After sign up, complete the process
+        await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+        
+        toast({
+          title: "Verification email sent",
+          description: "Please check your email to complete registration.",
+        });
+        
       } else {
+        // Sign in with email
+        if (!signInLoaded) return;
+        
+        await signIn.create({
+          identifier: email,
+          password,
+        });
+        
         toast({
           title: "Login Successful",
           description: "Welcome back! Redirecting to dashboard...",
         });
+        
         // Redirect to dashboard after successful login
         navigate("/dashboard");
       }
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: "Authentication error",
+        description: error instanceof Error ? error.message : "Failed to authenticate. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleOAuthSignIn = (provider: string) => {
+  const handleOAuthSignIn = async (provider: "google" | "github" | "twitter") => {
+    if (!signInLoaded) return;
+    
     setOauthLoading(provider);
     
-    // Simulate OAuth authentication
-    setTimeout(() => {
-      setOauthLoading(null);
-      toast({
-        title: `${provider} Sign-in Successful`,
-        description: "Welcome to the productivity platform! Redirecting to dashboard...",
+    try {
+      await signIn.authenticateWithRedirect({
+        strategy: `oauth_${provider}`,
+        redirectUrl: '/sso-callback',
+        redirectUrlComplete: '/dashboard'
       });
-      navigate("/dashboard");
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: "Authentication error",
+        description: error instanceof Error ? error.message : `Failed to sign in with ${provider}. Please try again.`,
+        variant: "destructive",
+      });
+      setOauthLoading(null);
+    }
   };
+
+  // If clerk is not loaded yet, show a loading state
+  if (!signInLoaded || !signUpLoaded) {
+    return (
+      <Card className="w-full max-w-md mx-auto bg-dark-light border border-dark-lighter animate-fade-up">
+        <CardContent className="flex items-center justify-center py-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto bg-dark-light border border-dark-lighter animate-fade-up">
@@ -87,10 +145,10 @@ const LoginForm = () => {
             type="button"
             variant="outline"
             className="bg-dark-lighter border-dark-lighter text-slate-100 hover:bg-dark-lighter/70 hover:text-gold flex items-center justify-center gap-2"
-            onClick={() => handleOAuthSignIn("Google")}
+            onClick={() => handleOAuthSignIn("google")}
             disabled={oauthLoading !== null}
           >
-            {oauthLoading === "Google" ? (
+            {oauthLoading === "google" ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             ) : (
               <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none">
@@ -108,10 +166,10 @@ const LoginForm = () => {
             type="button"
             variant="outline"
             className="bg-dark-lighter border-dark-lighter text-slate-100 hover:bg-dark-lighter/70 hover:text-gold flex items-center justify-center gap-2"
-            onClick={() => handleOAuthSignIn("GitHub")}
+            onClick={() => handleOAuthSignIn("github")}
             disabled={oauthLoading !== null}
           >
-            {oauthLoading === "GitHub" ? (
+            {oauthLoading === "github" ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             ) : (
               <Github className="h-5 w-5" />
@@ -123,10 +181,10 @@ const LoginForm = () => {
             type="button"
             variant="outline"
             className="bg-dark-lighter border-dark-lighter text-slate-100 hover:bg-dark-lighter/70 hover:text-gold flex items-center justify-center gap-2"
-            onClick={() => handleOAuthSignIn("Twitter")}
+            onClick={() => handleOAuthSignIn("twitter")}
             disabled={oauthLoading !== null}
           >
-            {oauthLoading === "Twitter" ? (
+            {oauthLoading === "twitter" ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             ) : (
               <Twitter className="h-5 w-5" />
